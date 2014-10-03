@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 10
+
+typedef char* stackElementT; //pila de cadena de caracteres
+
+typedef struct {
+  stackElementT *contents;
+  int maxSize;
+  int top;
+} stackT; //Atributos de la pila
+
+
+void StackInit(stackT *stackP, int maxSize); //inicializa pila
+void StackDestroy(stackT *stackP); //Destruye pila
+void StackPush(stackT *stackP, stackElementT element); //apila
+stackElementT StackPop(stackT *stackP); //desapilia
+int StackIsEmpty(stackT *stackP); //¿la pila está vacía?
+int StackIsFull(stackT *stackP); //¿la pila está llena?
+
+int main()
+{
+    unsigned int C, D;
+    scanf("%u %u");
+    return 0;
+}
+
+//Inicializa pila
+void StackInit(stackT *stackP, int maxSize)
+{
+  stackElementT *newContents;
+
+  /* Allocate a new array to hold the contents. */
+
+  newContents = (stackElementT *)malloc(sizeof(stackElementT) * maxSize);
+
+  if (newContents == NULL) {
+    fprintf(stderr, "Insufficient memory to initialize stack.\n");
+    exit(1);  /* Exit, returning error code. */
+  }
+
+  stackP->contents = newContents;
+  stackP->maxSize = maxSize;
+  stackP->top = -1;  /* I.e., empty */
+}
+
+//destruye pila
+void StackDestroy(stackT *stackP)
+{
+  /* Get rid of array. */
+  free(stackP->contents);
+
+  stackP->contents = NULL;
+  stackP->maxSize = 0;
+  stackP->top = -1;  /* I.e., empty */
+}
+
+//Apila
+void StackPush(stackT *stackP, stackElementT element)
+{
+  if (StackIsFull(stackP)) {
+    fprintf(stderr, "Can't push element on stack: stack is full.\n");
+    exit(1);  /* Exit, returning error code. */
+  }
+
+  /* Put information in array; update top. */
+
+  stackP->contents[++stackP->top] = element;
+}
+
+//Desapila
+stackElementT StackPop(stackT *stackP)
+{
+  if (StackIsEmpty(stackP)) {
+    fprintf(stderr, "Can't pop element from stack: stack is empty.\n");
+    exit(1);  /* Exit, returning error code. */
+  }
+
+  return stackP->contents[stackP->top--];
+}
+
+//¿la pila está vacía?
+int StackIsEmpty(stackT *stackP)
+{
+  return stackP->top < 0;
+}
+
+//¿la pila está llena?
+int StackIsFull(stackT *stackP)
+{
+  return stackP->top >= stackP->maxSize - 1;
+}
